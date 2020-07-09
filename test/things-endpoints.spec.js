@@ -2,6 +2,7 @@ const knex = require('knex')
 const app = require('../src/app')
 const helpers = require('./test-helpers')
 const supertest = require('supertest')
+const bcrypt = require('bcryptjs')
 
 describe('Things Endpoints', function() {
   let db
@@ -29,7 +30,7 @@ describe('Things Endpoints', function() {
   afterEach('cleanup', () => helpers.cleanTables(db))
 
   describe(`Protected endpoints`, () => {
-    beforeEach(`insert articles`, () => 
+    beforeEach(`insert things`, () => 
       helpers.seedThingsTables(
         db, 
         testUsers,
@@ -149,7 +150,7 @@ describe('Things Endpoints', function() {
     describe(`GET /api/things/:thing_id`, () => {
       context(`Given no things`, () => {
         beforeEach(() => 
-          db.into('thingful_users').insert(testUsers)
+          helpers.seedUsers(db, testUsers)
         )
 
         it(`responds with 404`, () => {
